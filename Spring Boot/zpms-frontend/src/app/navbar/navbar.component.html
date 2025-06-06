@@ -1,0 +1,31 @@
+<!-- <nav class="navbar">
+  <div class="left-section">
+    <button class="dropdown-btn">
+      <i class="fas fa-home"></i> Systems <i class="fas fa-caret-down"></i>
+    </button>
+  </div>
+  <div class="right-section">
+    <span>Hello, <strong>CEO</strong> <i class="fas fa-power-off"></i></span>
+  </div>
+</nav> -->
+<nav class="navbar">
+  <div class="left-section">
+    <div class="dropdown">
+      <div class="dropdown-btn">
+        <i class="fas fa-home"></i> Systems <i class="fas fa-caret-down"></i>
+      </div>
+      <div class="dropdown-content">
+        <a routerLink="/school-info-form"><i class="fas fa-book"></i> शाळेच उद्दिष्टांची नोंद करा</a>
+        <a routerLink="/wcd"><i class="fas fa-house"></i> आंगणवाडी उद्दिष्टांची नोंद करा</a>
+        <a routerLink="/hospital-form"><i class="fas fa-building-columns"></i> आरोग्य केंद्र चेक लिस्ट</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="right-section">
+ <span>Hello, <strong>{{ full_name }}</strong> <i class="fas fa-power-off"></i></span>
+
+    <a routerLink="/login" class="nav-link"><i class="fas fa-sign-in-alt"></i> Login</a>
+    <a routerLink="/register" class="nav-link"><i class="fas fa-user-plus"></i> Register</a>
+  </div>
+</nav>

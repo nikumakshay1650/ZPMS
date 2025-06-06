@@ -1,0 +1,123 @@
+// app.component.scss
+
+// Variables (optional, but good practice)
+$sidebar-width: 250px;
+$navbar-height: 60px; // Example
+$header-height: 70px; // Example
+$footer-height: 50px; // Example
+$transition-speed: 0.3s;
+
+// Make sure body and html take full height
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+// Basic styling for header, navbar, footer if they are fixed
+app-header {
+  // position: fixed; // If fixed
+  // top: 0;
+  // left: 0;
+  // right: 0;
+  // height: $header-height;
+  // z-index: 1001;
+  // background-color: #eee; // Example
+}
+
+app-navbar {
+  // position: fixed; // If fixed and below header
+  // top: $header-height; // If header is fixed
+  // left: 0;
+  // right: 0;
+  // height: $navbar-height;
+  // z-index: 1000;
+  // background-color: #f8f9fa; // Example
+}
+
+.main-layout {
+  display: flex;
+  flex-grow: 1; // Takes remaining vertical space
+  position: relative; // For absolute positioning of sidebar if needed
+  transition: padding-left $transition-speed ease-in-out;
+  // padding-top: $header-height + $navbar-height; // If header/navbar are fixed
+
+  // On larger screens, when sidebar is open, push main content
+  @media (min-width: 768px) {
+    &.sidebar-open {
+      .main-content {
+        margin-left: $sidebar-width;
+      }
+      app-sidebar.sidebar { // Or .sidebar if app-sidebar adds it
+        transform: translateX(0);
+        // Or: left: 0; if using left positioning
+      }
+    }
+  }
+}
+
+app-sidebar.sidebar { // Or just .sidebar if app-sidebar component adds 'sidebar' class to its host
+  width: $sidebar-width;
+  background-color: #333; // Example color
+  color: white;
+  position: fixed; // Fixed positioning for mobile overlay
+  left: 0;
+  top: 0; // Or $header-height + $navbar-height if header/navbar are fixed
+  bottom: 0;
+  z-index: 999; // Below navbar/header if they are fixed with higher z-index
+  transform: translateX(-100%); // Initially hidden off-screen to the left
+  transition: transform $transition-speed ease-in-out;
+  padding-top: $header-height + $navbar-height; // Adjust if header/navbar are fixed
+
+  // When main-layout.sidebar-open is active (meaning sidebarOpen is true)
+  // This selector targets the sidebar when its parent .main-layout has .sidebar-open
+  .main-layout.sidebar-open & { // More specific: apply only when parent has class
+    transform: translateX(0);
+  }
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 20px;
+  transition: margin-left $transition-speed ease-in-out;
+  // background-color: #fff; // Example
+  // On small screens, content might be overlaid by sidebar, or you might add an overlay
+}
+
+
+// On small screens (mobile), the sidebar will overlay the content.
+// The button in app-navbar toggles `sidebarOpen` in app.component.ts,
+// which in turn adds/removes `sidebar-open` class to `div.main-layout`
+// and conditionally renders `app-sidebar` using *ngIf.
+// The CSS above for `app-sidebar.sidebar` and `.main-layout.sidebar-open &` handles the slide-in.
+
+// Example: Add an overlay for mobile when sidebar is open
+// .sidebar-overlay {
+//   display: none;
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   width: 100%;
+//   height: 100%;
+//   background-color: rgba(0, 0, 0, 0.5);
+//   z-index: 998; // Below sidebar but above content
+// }
+// .main-layout.sidebar-open .sidebar-overlay {
+//   display: block;
+// }
+
+
+app-footer {
+  // background-color: #ccc; // Example
+  // height: $footer-height;
+  // text-align: center;
+  // padding: 10px 0;
+}
+
+// Styles for navbar.component.scss (example)
+// You already have this file, but ensure .d-md-none is working with your breakpoint system (e.g., Bootstrap)
+// .navbar {
+//   .toggle-btn {
+//     &.d-md-none { /* styles for mobile toggle */ }
+//   }
+// }
