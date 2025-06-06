@@ -1,0 +1,40 @@
+.sidebar {
+  width: 250px;
+  background: #f8f9fa;
+  padding: 20px;
+  border-right: 1px solid #dee2e6;
+  min-height: 100vh;
+
+  ul {
+    list-style: none;
+    padding: 0;
+
+    li {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      cursor: pointer;
+      color: #333;
+      transition: background 0.3s;
+
+      i {
+        margin-right: 10px;
+        width: 20px;
+        text-align: center;
+      }
+
+      &:hover {
+        background: #e2e6ea;
+      }
+
+      &.active {
+        background: #007bff;
+        color: #fff;
+
+        i {
+          color: #fff;
+        }
+      }
+    }
+  }
+}

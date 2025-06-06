@@ -1,0 +1,99 @@
+<div class="container my-4 report-container">
+  <h2 class="text-center text-primary mb-4"><i class="bi bi-file-earmark-bar-graph-fill me-2"></i>अंगणवाडी उद्दिष्टांचा अहवाल</h2>
+
+  <form [formGroup]="filterForm" class="card p-3 shadow-sm mb-4 rounded-4">
+    <div class="row g-3 align-items-end">
+      <div class="col-md-3">
+        <label class="form-label fw-semibold">तालुका निवडा</label>
+        <select class="form-select"
+                formControlName="taluka"
+                (change)="filterForm.get('anganwadiNumber')?.setValue('')">
+          <option value="">सर्व तालुके</option>
+          <option *ngFor="let talukaName of uniqueTalukas" [value]="talukaName">{{ talukaName }}</option>
+        </select>
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label fw-semibold">अंगणवाडी निवडा</label>
+        <select class="form-select" formControlName="anganwadiNumber">
+          <option value="">सर्व अंगणवाडी</option>
+          <option *ngFor="let aw of uniqueAnganwadisForSelectedTaluka" [value]="aw.number">
+            {{ aw.name }} ({{ aw.number }})
+          </option>
+        </select>
+      </div>
+
+      <div class="col-md-2">
+        <label class="form-label fw-semibold">पासून</label>
+        <input type="date" class="form-control" formControlName="fromDate">
+      </div>
+
+      <div class="col-md-2">
+        <label class="form-label fw-semibold">पर्यंत</label>
+        <input type="date" class="form-control" formControlName="toDate">
+      </div>
+
+      <div class="col-md-2 text-end">
+        <button type="button" class="btn btn-primary me-2 w-100" (click)="showData()" [disabled]="isLoading">
+          <i class="bi bi-search me-1"></i>
+          <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          शोधा
+        </button>
+        <button type="button" class="btn btn-outline-danger w-100 mt-2" (click)="clearFilters()" [disabled]="isLoading">
+          <i class="bi bi-x-circle"></i> क्लिअर
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <div *ngIf="isLoading" class="text-center my-3">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="errorMessage && !isLoading" class="alert alert-danger my-3" role="alert">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="!isLoading && !errorMessage && tableData.length === 0 && (filterForm.dirty || filterForm.touched || allAnganwadis.length > 0)" class="alert alert-warning my-3">
+    तुमच्या निकषांशी जुळणारा कोणताही डेटा आढळला नाही.
+  </div>
+
+  <div *ngIf="!isLoading && !errorMessage && allAnganwadis.length === 0 && !filterForm.dirty && !filterForm.touched" class="alert alert-info my-3">
+    सध्या अंगणवाडीचा कोणताही डेटा उपलब्ध नाही.
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover align-middle text-center" *ngIf="!isLoading && !errorMessage && tableData.length > 0">
+      <thead class="table-primary">
+        <tr>
+          <th>अ. क्र.</th>
+          <th>अंगणवाडी क्र.</th>
+          <th>तालुका</th>
+          <th>अंगणवाडी नाव</th>
+          <th>भेट दिनांक</th>
+          <th>कृती</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of tableData; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ row.anganwadiNumber }}</td>
+          <td>{{ row.taluka }}</td>
+          <td>{{ row.anganwadiHelperName }}</td>
+          <td>{{ row.inspectionDate | date:'dd-MM-yyyy' }}</td>
+          <td>
+            <a class="btn btn-sm btn-outline-primary me-1"
+               [routerLink]="['/anganwadi-form', row.id]">
+              📝 भरा
+            </a>
+            <button class="btn btn-sm btn-outline-secondary" (click)="viewReportDetails(row)">
+              👁 पहा
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
